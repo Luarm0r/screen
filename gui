@@ -1,160 +1,82 @@
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
-local MarketplaceService = game:GetService("MarketplaceService")
-
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
+local Camera = workspace.CurrentCamera
 
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "LoadingScreenGui"
+screenGui.Name = "LoadingScreen"
 screenGui.ResetOnSpawn = false
-screenGui.IgnoreGuiInset = true
-screenGui.Parent = playerGui
+screenGui.Parent = game:GetService("CoreGui")
 
-local bg = Instance.new("Frame")
-bg.Size = UDim2.new(1, 0, 1, 0)
-bg.Position = UDim2.new(0, 0, 0, 0)
-bg.BackgroundColor3 = Color3.new(0, 0, 0)
-bg.Parent = screenGui
+local bgFrame = Instance.new("Frame")
+bgFrame.Size = UDim2.new(1, 0, 1, 0)
+bgFrame.BackgroundColor3 = Color3.new(0, 0, 0)
+bgFrame.BackgroundTransparency = 0
+bgFrame.BorderSizePixel = 0
+bgFrame.Parent = screenGui
+bgFrame.ZIndex = 0
 
-local box = Instance.new("Frame")
-box.AnchorPoint = Vector2.new(0.5, 0.5)
-box.Position = UDim2.new(0.5, 0, 0.5, 0)
-box.Size = UDim2.new(0, 450, 0, 150)
-box.BackgroundColor3 = Color3.new(0, 0, 0)
-box.BorderSizePixel = 0
-box.Parent = screenGui
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 350, 0, 120)
+mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.BackgroundColor3 = Color3.new(0, 0, 0)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
+mainFrame.ZIndex = 1
 
-local boxUICorner = Instance.new("UICorner")
-boxUICorner.CornerRadius = UDim.new(0, 16)
-boxUICorner.Parent = box
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = mainFrame
 
-local boxBorder = Instance.new("Frame")
-boxBorder.Size = UDim2.new(1, 0, 1, 0)
-boxBorder.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-boxBorder.BorderSizePixel = 0
-boxBorder.Parent = box
+local borderStroke = Instance.new("UIStroke")
+borderStroke.Color = Color3.fromRGB(0, 255, 0)
+borderStroke.Thickness = 2
+borderStroke.Parent = mainFrame
 
-local borderUICorner = Instance.new("UICorner")
-borderUICorner.CornerRadius = UDim.new(0, 16)
-borderUICorner.Parent = boxBorder
+local title = Instance.new("TextLabel")
+title.Text = ""
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.fromRGB(0, 255, 0)
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 24
+title.ZIndex = 2
+title.Parent = mainFrame
 
-local innerBox = Instance.new("Frame")
-innerBox.Position = UDim2.new(0, 3, 0, 3)
-innerBox.Size = UDim2.new(1, -6, 1, -6)
-innerBox.BackgroundColor3 = Color3.new(0, 0, 0)
-innerBox.BorderSizePixel = 0
-innerBox.Parent = box
+local loadingLabel = Instance.new("TextLabel")
+loadingLabel.Text = "Loading.."
+loadingLabel.Size = UDim2.new(1, 0, 0, 40)
+loadingLabel.Position = UDim2.new(0, 0, 0, 40)
+loadingLabel.BackgroundTransparency = 1
+loadingLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+loadingLabel.Font = Enum.Font.SourceSans
+loadingLabel.TextSize = 20
+loadingLabel.ZIndex = 2
+loadingLabel.Parent = mainFrame
 
-local innerBoxCorner = Instance.new("UICorner")
-innerBoxCorner.CornerRadius = UDim.new(0, 14)
-innerBoxCorner.Parent = innerBox
-
-local titleText = Instance.new("TextLabel")
-titleText.AnchorPoint = Vector2.new(0.5, 0)
-titleText.Position = UDim2.new(0.5, 0, 0.05, 0)
-titleText.Size = UDim2.new(0, 300, 0, 40)
-titleText.BackgroundTransparency = 1
-titleText.Text = ""
-titleText.Font = Enum.Font.GothamBlack
-titleText.TextColor3 = Color3.fromRGB(0, 255, 0)
-titleText.TextScaled = true
-titleText.Parent = innerBox
-
-local loadingText = Instance.new("TextLabel")
-loadingText.AnchorPoint = Vector2.new(0.5, 0)
-loadingText.Position = UDim2.new(0.5, 0, 0.35, 0)
-loadingText.Size = UDim2.new(0, 350, 0, 60)
-loadingText.BackgroundTransparency = 1
-loadingText.Text = "Loading..."
-loadingText.Font = Enum.Font.GothamBold
-loadingText.TextColor3 = Color3.fromRGB(0, 255, 0)
-loadingText.TextScaled = true
-loadingText.Parent = innerBox
-
-local barBG = Instance.new("Frame")
-barBG.AnchorPoint = Vector2.new(0.5, 0)
-barBG.Position = UDim2.new(0.5, 0, 0.75, 0)
-barBG.Size = UDim2.new(0, 400, 0, 25)
-barBG.BackgroundColor3 = Color3.fromRGB(0, 100, 0)
-barBG.BorderSizePixel = 0
-barBG.Parent = innerBox
-
-local barBGUIcorner = Instance.new("UICorner")
-barBGUIcorner.CornerRadius = UDim.new(0, 12)
-barBGUIcorner.Parent = barBG
-
-local barFill = Instance.new("Frame")
-barFill.Size = UDim2.new(0, 0, 1, 0)
-barFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-barFill.BorderSizePixel = 0
-barFill.Parent = barBG
-
-local barFillUICorner = Instance.new("UICorner")
-barFillUICorner.CornerRadius = UDim.new(0, 12)
-barFillUICorner.Parent = barFill
-
-local totalTime = 4
-local changeTextAt = 1
-local startTime = tick()
-
-local function getGameName()
-    return MarketplaceService:GetProductInfo(game.PlaceId).Name
-end
-
+local fullTitle = "DK's HUB"
 local function typeText(label, text, speed)
-	speed = speed or 0.06
-	label.Text = ""
-	for i = 1, #text do
-		label.Text = string.sub(text, 1, i)
-		task.wait(speed)
-	end
+    label.Text = ""
+    for i = 1, #text do
+        label.Text = string.sub(text, 1, i)
+        task.wait(speed)
+    end
 end
 
 task.spawn(function()
-	typeText(titleText, "DK's HUB", 0.06)
+    typeText(title, fullTitle, 0.15)
 end)
 
-local connection
-connection = RunService.RenderStepped:Connect(function()
-	local elapsed = tick() - startTime
-	local progress = math.clamp(elapsed / totalTime, 0, 1)
-	barFill.Size = UDim2.new(progress, 0, 1, 0)
+task.spawn(function()
+    task.wait(2)
+    local gameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+    loadingLabel.Text = "Game detected: "..gameName
+end)
 
-	if elapsed >= changeTextAt and loadingText.Text ~= "Game detected: " .. getGameName() then
-		loadingText.Text = "Game detected: " .. getGameName()
-	end
-
-	if progress >= 1 then
-		connection:Disconnect()
-
-		local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		local tweens = {}
-
-		local function tweenObject(obj)
-			if obj:IsA("TextLabel") then
-				table.insert(tweens, TweenService:Create(obj, tweenInfo, {TextTransparency = 1, BackgroundTransparency = 1}))
-			elseif obj:IsA("Frame") then
-				table.insert(tweens, TweenService:Create(obj, tweenInfo, {BackgroundTransparency = 1}))
-			else
-				table.insert(tweens, TweenService:Create(obj, tweenInfo, {BackgroundTransparency = 1}))
-			end
-		end
-
-		local objectsToTween = {bg, box, boxBorder, innerBox, loadingText, titleText, barBG, barFill}
-
-		for _, obj in pairs(objectsToTween) do
-			tweenObject(obj)
-		end
-
-		for _, tw in pairs(tweens) do
-			tw:Play()
-		end
-
-		-- Wait for all tweens to complete
-		tweens[1].Completed:Wait()
-
-		screenGui:Destroy()
-	end
+task.spawn(function()
+    task.wait(5)
+    screenGui:Destroy()
 end)
