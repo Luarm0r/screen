@@ -8,14 +8,15 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "LoadingScreen"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = game:GetService("CoreGui")
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
 local bgFrame = Instance.new("Frame")
 bgFrame.Size = UDim2.new(1, 0, 1, 0)
 bgFrame.BackgroundColor3 = Color3.new(0, 0, 0)
 bgFrame.BackgroundTransparency = 0
 bgFrame.BorderSizePixel = 0
+bgFrame.ZIndex = 1000
 bgFrame.Parent = screenGui
-bgFrame.ZIndex = 0
 
 local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0, 350, 0, 120)
@@ -23,8 +24,8 @@ mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 mainFrame.BackgroundColor3 = Color3.new(0, 0, 0)
 mainFrame.BorderSizePixel = 0
+mainFrame.ZIndex = 1001
 mainFrame.Parent = screenGui
-mainFrame.ZIndex = 1
 
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 12)
@@ -43,7 +44,7 @@ title.BackgroundTransparency = 1
 title.TextColor3 = Color3.fromRGB(0, 255, 0)
 title.Font = Enum.Font.SourceSansBold
 title.TextSize = 24
-title.ZIndex = 2
+title.ZIndex = 1002
 title.Parent = mainFrame
 
 local loadingLabel = Instance.new("TextLabel")
@@ -54,7 +55,7 @@ loadingLabel.BackgroundTransparency = 1
 loadingLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
 loadingLabel.Font = Enum.Font.SourceSans
 loadingLabel.TextSize = 20
-loadingLabel.ZIndex = 2
+loadingLabel.ZIndex = 1002
 loadingLabel.Parent = mainFrame
 
 local fullTitle = "DK's HUB"
